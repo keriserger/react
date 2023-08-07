@@ -1,0 +1,128 @@
+import React, { Component } from 'react';
+import { Button } from 'antd';
+
+interface HomeProps {
+  message: string;
+}
+
+function Profile() {
+  const user = {
+    firstName: 'is componentssa',
+    lastName: 'Johnson',
+    isok: true
+  };
+
+  return (
+    <> 
+    </>
+  );
+}
+
+class Home extends Component<HomeProps> {
+  state = {
+    isLoading: true,
+    count: 0,
+    products: [
+      { title: 'Cabbage', isFruit: false, id: 1 },
+      { title: 'Garlic', isFruit: false, id: 2 },
+      { title: 'Apple', isFruit: true, id: 3 }
+    ]
+  };
+
+  constructor(props: HomeProps) {
+    super(props);
+    console.log('Component is created');
+  }
+
+  componentDidMount() {
+    console.log('componentDidMount',this.props.message);
+    this.setState({ isLoading: false });
+    console.log('===');
+  }
+
+  componentDidUpdate(prevProps: HomeProps, prevState: any) {
+    if (prevProps.message !== this.props.message) {
+      console.log('Message prop has changed');
+    }
+
+    if (prevState.count !== this.state.count) {
+      console.log('Count state has changed:', this.state.count);
+    }
+  }
+
+  componentWillUnmount() {
+    console.log('Component is unmounted');
+  }
+
+  setprod = () => {
+    const { products } = this.state;
+    const newProduct = [...products];
+    newProduct[1] = { ...newProduct[1], isFruit: !newProduct[1].isFruit };
+    this.setState({ products: newProduct });
+  };
+
+  addprod = () => {
+    console.log('addprod');
+    const { products } = this.state;
+    const newProduct = [...products];
+    newProduct.push({
+      title: 'Apple' + (products.length + 1),
+      isFruit: true,
+      id: products.length + 1
+    });
+    this.setState({ products: newProduct });
+  };
+
+  delprod = () => {
+    const { products } = this.state;
+    const newProduct = [...products];
+    newProduct.pop();
+    this.setState({ products: newProduct });
+  };
+
+  copyprod = () => {
+    const newProduct = [{ title: 'Cabbage', isFruit: false, id: 1 }];
+    this.setState({ products: newProduct });
+  };
+
+  handleClick = (index: number) => {
+    const { products, count } = this.state;
+    const newProducts = [...products];
+    newProducts[index] = { ...newProducts[index], id: newProducts[index].id + 1 };
+    this.setState({ products: newProducts, count: count + 1 });
+  };
+
+  render() {
+    const { isLoading, products } = this.state;
+
+    const listItems = products.map((product, index) => (
+      <li
+        key={index}
+        style={{
+          color: product.isFruit ? 'magenta' : 'darkgreen'
+        }}
+        onClick={() => this.handleClick(index)}
+      >
+        {product.title} {product.id}
+      </li>
+    ));
+
+    return (
+      <section>
+        <h1>Amazing scientists</h1>
+        <div>is componentssa</div>
+        <ul>{listItems}</ul>
+        <Profile />
+        <Profile />
+        <Profile />
+        {/* <Form />   // Uncomment this if the Form component is provided */}
+        <Button type="primary">Button</Button>
+        <button onClick={this.addprod}>addprod</button>
+        <button onClick={this.delprod}>delprod</button>
+        <button onClick={this.setprod}>setprod</button>
+      </section>
+    );
+  }
+}
+
+export default Home;
